@@ -31,8 +31,6 @@ def query(question, n_results, threshold):
         metadata = query_result["metadatas"][0][match_index] # type: ignore
         distance = query_result["distances"][0][match_index] # type: ignore
 
-        print(distance, threshold)
-
         if distance < threshold:
             formatted_result.append({
                 "id": id,

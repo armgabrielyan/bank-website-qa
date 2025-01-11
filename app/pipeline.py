@@ -32,30 +32,41 @@ def _format_response(query_result, prediction):
         }
     else:
         structured_prediction = json.loads(prediction)
-
+        
     response = {
         "answer": structured_prediction["answer"],
         "sources": [],
     }
 
     for source_id in structured_prediction["source_ids"]:
-        match = next(r for r in query_result if r["id"] == source_id)
+        match = None
+        for r in query_result:
+            if r["id"] == source_id:
+                match = r
+                break
 
-        response["sources"].append({
-            "id": source_id,
-            "title": match["metadata"]["name"],
-            "url": match["metadata"]["url"],
-        })
+        if match is not None:
+            response["sources"].append({
+                "id": source_id,
+                "title": match["metadata"]["name"],
+                "url": match["metadata"]["url"],
+            })
+
+    if not response["sources"]:
+        response["answer"] = "I do not know the answer to the question."
 
     return response
 
 def answer_question(question):
-    query_result = query(question, n_results=N_RESULTS, threshold=THRESHOLD)
+    try:
+        query_result = query(question, n_results=N_RESULTS, threshold=THRESHOLD)
 
-    context = _prepare_context(query_result, question)
+        context = _prepare_context(query_result, question)
 
-    prediction = groq.predict(context=context)
+        prediction = groq.predict(context=context)
 
-    response = _format_response(query_result, prediction)
+        response = _format_response(query_result, prediction)
 
-    return response
+        return response
+    except Exception:
+        return {"error": "An error occurred"}

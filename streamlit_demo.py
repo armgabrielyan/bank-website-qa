@@ -3,7 +3,7 @@ import streamlit as st
 from app.pipeline import answer_question
 
 def main():
-    st.title("Question Answering Chatbot about Ardshinbank website")
+    st.title("Chatbot on Ardshinbank website")
 
     question = st.text_input("Enter your question:")
 
