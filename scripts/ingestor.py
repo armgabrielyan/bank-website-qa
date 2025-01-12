@@ -1,8 +1,13 @@
 import json
 from pathlib import Path
 
+from langchain_text_splitters import RecursiveCharacterTextSplitter
+
 from app.db import collection
 
+
+# Split the texts into smaller chunks to ensure that the documents are not too large and have predictable sizes.
+text_splitter = RecursiveCharacterTextSplitter(chunk_size=512, chunk_overlap=64)
 
 def insert_extracted_data(base_path):
     extracted_path = Path(base_path) / "data" / "extracted"
@@ -20,8 +25,8 @@ def insert_extracted_data(base_path):
             with open(data_path, 'r') as f:
                 content = f.read()
             
-            ids = [f"{folder.name}"]
-            documents = [content]
+            documents = text_splitter.create_documents([content])
+
             metadatas = [
                 {
                     "name": metadata["name"],
@@ -29,11 +34,12 @@ def insert_extracted_data(base_path):
                 }
             ]
 
-            collection.upsert(
-                ids=ids,
-                documents=documents,
-                metadatas=metadatas, # type: ignore
-            )
+            for index, document in enumerate(documents):
+                collection.upsert(
+                    ids=[f"{folder.name}-{index}"],
+                    documents=[document.page_content],
+                    metadatas=metadatas, # type: ignore
+                )
 
     print("Inserted documents count:", collection.count())
 

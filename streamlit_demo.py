@@ -1,6 +1,6 @@
 import streamlit as st
 
-from app.pipeline import answer_question
+from app.pipeline import qa_pipeline
 
 def main():
     st.title("Chatbot on Ardshinbank website")
@@ -13,7 +13,7 @@ def main():
         else:
             with st.spinner("Generating answer..."):
                 try:
-                    result = answer_question(question)
+                    result = qa_pipeline.answer_question(question)
                     st.success("Answer Generated!")
                     st.write(f"**Answer:** {result['answer']}")
                     sources = result.get('sources', [])

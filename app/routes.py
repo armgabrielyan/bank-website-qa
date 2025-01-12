@@ -1,7 +1,7 @@
 from fastapi import APIRouter, status
 from fastapi.responses import ORJSONResponse
 
-from app.pipeline import answer_question
+from app.pipeline import qa_pipeline
 from app.schemas import Answer, Question
 
 router = APIRouter(
@@ -18,6 +18,6 @@ router = APIRouter(
 async def post(
     payload: Question,
 ):
-    response = answer_question(payload.question)
+    response = qa_pipeline.answer_question(payload.question)
 
     return response
