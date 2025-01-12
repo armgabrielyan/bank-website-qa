@@ -59,7 +59,7 @@ class Pipeline:
 
         return prediction
 
-    def _validate_and_format_response(self, query_result, prediction):
+    def _validate_and_format_response(self, aggregated_result, prediction):
         if prediction is None:
             structured_prediction = {
                 "answer": "I do not know the answer to the question.",
@@ -74,13 +74,13 @@ class Pipeline:
         }
 
         print("====Pred source ids====", structured_prediction["source_ids"])
-        print("====Query result=======", [r["id"] for r in query_result])
+        print("====Query result=======", [r["id"] for r in aggregated_result])
 
         titles = set()
 
         for source_id in structured_prediction["source_ids"]:
             match = None
-            for r in query_result:
+            for r in aggregated_result:
                 if r["id"] == source_id:
                     match = r
                     break
@@ -106,7 +106,7 @@ class Pipeline:
             aggregated_result = self._aggregate(query_result, threshold=THRESHOLD)
             context = self._prepare_context(aggregated_result, question)
             prediction = self._predict(context)
-            response = self._validate_and_format_response(query_result, prediction)
+            response = self._validate_and_format_response(aggregated_result, prediction)
 
             return response
         except Exception:
