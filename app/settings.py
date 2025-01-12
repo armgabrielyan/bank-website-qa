@@ -22,5 +22,5 @@ GROQ_API_KEY = config("GROQ_API_KEY", cast=str, default="")
 
 DB_NAME = config("DB_NAME", cast=str, default="vector_db")
 COLLECTION_NAME = config("COLLECTION_NAME", cast=str, default="bank-website")
-N_RESULTS = config("N_RESULTS", cast=int, default=3)
+N_RESULTS = config("N_RESULTS", cast=int, default=15)
 THRESHOLD = config("THRESHOLD", cast=float, default=0.75)

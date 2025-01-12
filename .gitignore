@@ -185,4 +185,5 @@ cython_debug/
 Thumbs.db
 
 # Data folder
-data/
+data/vector_db
+data/extracted
