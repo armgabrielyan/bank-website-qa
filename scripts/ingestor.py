@@ -25,21 +25,25 @@ def insert_extracted_data(base_path):
             with open(data_path, 'r') as f:
                 content = f.read()
             
-            documents = text_splitter.create_documents([content])
+            content_documents = text_splitter.create_documents([content])
 
-            metadatas = [
-                {
+            ids = []
+            documents = []
+            metadatas = []
+
+            for index, document in enumerate(content_documents):
+                ids.append(f"{folder.name}-{index}")
+                documents.append(document.page_content)
+                metadatas.append({
                     "name": metadata["name"],
                     "url": metadata["url"],
-                }
-            ]
+                })
 
-            for index, document in enumerate(documents):
-                collection.upsert(
-                    ids=[f"{folder.name}-{index}"],
-                    documents=[document.page_content],
-                    metadatas=metadatas, # type: ignore
-                )
+            collection.upsert(
+                ids=ids,
+                documents=documents,
+                metadatas=metadatas, # type: ignore
+            )
 
     print("Inserted documents count:", collection.count())
 

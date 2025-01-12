@@ -25,8 +25,6 @@ class Pipeline:
             metadata = query_result["metadatas"][0][match_index] # type: ignore
             distance = query_result["distances"][0][match_index] # type: ignore
 
-            print(id, distance, threshold)
-
             if distance < threshold:
                 formatted_result.append({
                     "id": id,
@@ -73,16 +71,13 @@ class Pipeline:
             "sources": [],
         }
 
-        print("====Pred source ids====", structured_prediction["source_ids"])
-        print("====Query result=======", [r["id"] for r in aggregated_result])
-
         titles = set()
 
         for source_id in structured_prediction["source_ids"]:
             match = None
-            for r in aggregated_result:
-                if r["id"] == source_id:
-                    match = r
+            for result in aggregated_result:
+                if result["id"] == source_id:
+                    match = result
                     break
 
             # If the source is not in the query result, skip it as it is not a valid source
