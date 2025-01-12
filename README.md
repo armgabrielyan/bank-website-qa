@@ -22,6 +22,22 @@ source .venv/bin/activate
 pip install -r requirements.txt
 ```
 
+## Prerequisites
+
+1. Create a `.env` file.
+
+```shell
+cp .env.example .env
+```
+
+#### LLM providers
+
+- [Groq](https://groq.com/)
+
+Create an API key at [Groq developer console](https://console.groq.com/keys). Free tier should be sufficient.
+
+By default, `llama-3.3-70b-versatile` model is used, but other models can be used [supported by Groq](https://console.groq.com/docs/models).
+
 ## Data preparation
 
 1. Extract texts from screenshots of web pages.
@@ -37,22 +53,6 @@ python -m scripts.ingestor
 ```
 
 ## Run
-
-### Prerequisites
-
-1. Create a `.env` file.
-
-```shell
-cp .env.example
-```
-
-#### LLM providers
-
-- [Groq](https://groq.com/)
-
-Create an API key at [Groq developer console](https://console.groq.com/keys). Free tier should be sufficient.
-
-By default, `llama-3.3-70b-versatile` model is used, but other models can be used [supported by Groq](https://console.groq.com/docs/models).
 
 ### API
 
